@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: equesto-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: equesto
+      POSTGRES_USER: equesto
+      POSTGRES_PASSWORD: equesto123
+    ports:
+      - "5432:5432"
+    volumes:
+      - equesto_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U equesto"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  equesto_pgdata:
