@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-
-const C = {
-  primary: '#2D3B1E',
-  accent: '#B8960C',
-  bg: '#f8f7f2',
-  surface: '#fff',
-  border: '#E8E4DC',
-  text: '#1A1A1A',
-  textMuted: '#6B6B6B',
-};
+import { colors } from '../theme';
 
 const NAV = [
   { path: '/', icon: '📊', label: 'Dashboard' },
@@ -32,10 +23,16 @@ export default function Layout({ children }) {
 
   return (
     <div style={s.wrap}>
-      {/* Sidebar */}
       <aside style={{ ...s.sidebar, width: sidebarOpen ? 220 : 64 }}>
         <div style={s.sidebarHeader}>
-          {sidebarOpen && <span style={s.logo}>🐎 Equesto</span>}
+          {sidebarOpen ? (
+            <div style={s.logoWrap}>
+              <img src="/logo.png" alt="Equesto" style={s.logoImg} />
+              <span style={s.logoText}>Equesto</span>
+            </div>
+          ) : (
+            <img src="/logo.png" alt="Equesto" style={s.logoImgSmall} />
+          )}
           <button style={s.toggleBtn} onClick={() => setSidebarOpen(v => !v)}>
             {sidebarOpen ? '◀' : '▶'}
           </button>
@@ -69,7 +66,6 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* Main */}
       <main style={s.main}>
         <div style={s.content}>{children}</div>
       </main>
@@ -78,9 +74,9 @@ export default function Layout({ children }) {
 }
 
 const s = {
-  wrap: { display: 'flex', minHeight: '100vh', background: C.bg },
+  wrap: { display: 'flex', minHeight: '100vh', background: colors.background },
   sidebar: {
-    background: C.primary,
+    background: colors.primary,
     display: 'flex',
     flexDirection: 'column',
     transition: 'width 0.2s',
@@ -94,9 +90,12 @@ const s = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '20px 12px 16px',
-    borderBottom: `1px solid rgba(255,255,255,0.1)`,
+    borderBottom: ' 1px solid rgba(255,255,255,0.1)',
   },
-  logo: { color: '#fff', fontWeight: 800, fontSize: 18 },
+  logoWrap: { display: 'flex', alignItems: 'center', gap: 10 },
+  logoImg: { width: 36, height: 36, objectFit: 'contain', flexShrink: 0 },
+  logoImgSmall: { width: 32, height: 32, objectFit: 'contain', margin: '0 auto' },
+  logoText: { color: '#fff', fontWeight: 800, fontSize: 17 },
   toggleBtn: {
     background: 'none',
     border: 'none',
@@ -104,6 +103,7 @@ const s = {
     cursor: 'pointer',
     fontSize: 12,
     padding: 4,
+    flexShrink: 0,
   },
   nav: { flex: 1, padding: '8px 0' },
   navItem: {
@@ -114,18 +114,17 @@ const s = {
     color: 'rgba(255,255,255,0.7)',
     textDecoration: 'none',
     transition: 'background 0.15s',
-    borderRadius: 0,
   },
   navItemActive: {
     background: 'rgba(255,255,255,0.12)',
     color: '#fff',
-    borderLeft: `3px solid ${C.accent}`,
+    borderLeft: `3px solid ${colors.accent}`,
   },
   navIcon: { fontSize: 16, minWidth: 20, textAlign: 'center' },
   navLabel: { fontSize: 14, fontWeight: 500 },
   sidebarFooter: {
     padding: '12px 14px',
-    borderTop: `1px solid rgba(255,255,255,0.1)`,
+    borderTop: '1px solid rgba(255,255,255,0.1)',
   },
   adminInfo: { marginBottom: 8 },
   adminName: { color: 'rgba(255,255,255,0.6)', fontSize: 12 },
