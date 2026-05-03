@@ -7,12 +7,20 @@ const app = express();
 // ============================================================
 // Middlewares globais
 // ============================================================
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3001',
+  'https://equesto.vercel.app',
+  process.env.ADMIN_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    process.env.ADMIN_URL || 'http://localhost:5173',
-    'http://localhost:3001',
-    // Adicione a URL do seu admin em produção aqui
-  ],
+  origin: (origin, callback) => {
+    // permite requests sem origin (ex: mobile, Postman, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS bloqueado: ${origin}`));
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
