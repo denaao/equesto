@@ -45,18 +45,4 @@ router.post('/login', loginLimiter, async (req, res) => {
 
     res.json({
       token,
-      admin: { id: user.id, email: user.email, name: user.name },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
-});
-
-// GET /api/auth/me - verifica token
-const auth = require('../middleware/auth');
-router.get('/me', auth, (req, res) => {
-  res.json({ admin: req.admin });
-});
-
-module.exports = router;
+      admin: { id: user.id, email:

@@ -235,29 +235,4 @@ function Field({ label, children }) {
 
 function CheckField({ label, checked, onChange }) {
   return (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 14, fontWeight: 500 }}>
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ width: 16, height: 16 }} />
-      {label}
-    </label>
-  );
-}
-
-const s = {
-  wrap: { maxWidth: 780 },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-  h1: { fontSize: 22, fontWeight: 800, color: '#1A1A1A' },
-  backBtn: { background: 'none', border: '1.5px solid #E8E4DC', borderRadius: 8, padding: '7px 16px', cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#1B4332' },
-  form: { background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 16 },
-  grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
-  grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 },
-  input: { padding: '9px 12px', border: '1.5px solid #E8E4DC', borderRadius: 8, fontSize: 13, outline: 'none', width: '100%', fontFamily: 'inherit', boxSizing: 'border-box' },
-  uploadArea: { display: 'flex', flexDirection: 'column', gap: 8 },
-  uploadControls: { display: 'flex', gap: 8, alignItems: 'center' },
-  preview: { width: 120, height: 120, objectFit: 'cover', borderRadius: 8, border: '1.5px solid #E8E4DC' },
-  uploadBtn: { padding: '9px 16px', background: '#1B4332', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' },
-  removeBtn: { padding: '9px 16px', background: 'none', border: '1.5px solid #E8E4DC', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer', color: '#c00' },
-  checkboxRow: { display: 'flex', gap: 24, flexWrap: 'wrap' },
-  actions: { display: 'flex', gap: 12, justifyContent: 'flex-end', paddingTop: 8 },
-  cancelBtn: { padding: '10px 20px', border: '1.5px solid #E8E4DC', borderRadius: 8, background: '#fff', cursor: 'pointer', fontSize: 14, fontWeight: 600 },
-  saveBtn: { padding: '10px 24px', background: '#1B4332', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer' },
-};
+    <label style={{ display: 'flex', al

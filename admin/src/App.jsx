@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Listings from './pages/Listings';
 import ListingForm from './pages/ListingForm';
 import Categories from './pages/Categories';
+import Admins from './pages/Admins';
 import Layout from './components/Layout';
 
 // ---- Auth context ----
@@ -90,9 +91,6 @@ export default function App() {
               </Layout>
             </PrivateRoute>
           } />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  );
-}
+          <Route path="/admins" element={
+            <PrivateRoute>
+              <Layout

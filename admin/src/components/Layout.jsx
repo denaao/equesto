@@ -7,6 +7,7 @@ const NAV = [
   { path: '/', icon: '📊', label: 'Dashboard' },
   { path: '/listings', icon: '📋', label: 'Anúncios' },
   { path: '/categories', icon: '🏷️', label: 'Categorias' },
+  { path: '/admins', icon: '👤', label: 'Admins' },
 ];
 
 export default function Layout({ children }) {
@@ -25,15 +26,14 @@ export default function Layout({ children }) {
     <div style={s.wrap}>
       <aside style={{ ...s.sidebar, width: sidebarOpen ? 220 : 64 }}>
         <div style={s.sidebarHeader}>
-          {sidebarOpen ? (
-            <div style={s.logoWrap}>
-              <img src="/logo.png" alt="Equesto" style={s.logoImg} />
-              <span style={s.logoText}>Equesto</span>
-            </div>
-          ) : (
-            <img src="/logo.png" alt="Equesto" style={s.logoImgSmall} />
-          )}
-          <button style={s.toggleBtn} onClick={() => setSidebarOpen(v => !v)}>
+          <div style={{ ...s.logoWrap, justifyContent: sidebarOpen ? 'center' : 'center' }}>
+            <img
+              src="/logo.png"
+              alt="Equesto"
+              style={sidebarOpen ? s.logoImg : s.logoImgSmall}
+            />
+          </div>
+          <button style={s.toggleBtn} onClick={() => setSidebarOpen(v => !v)} title={sidebarOpen ? 'Recolher' : 'Expandir'}>
             {sidebarOpen ? '◀' : '▶'}
           </button>
         </div>
@@ -76,7 +76,7 @@ export default function Layout({ children }) {
 const s = {
   wrap: { display: 'flex', minHeight: '100vh', background: colors.background },
   sidebar: {
-    background: colors.primary,
+    background: `linear-gradient(180deg, #1e2a14 0%, ${colors.primary} 60%, #1a2410 100%)`,
     display: 'flex',
     flexDirection: 'column',
     transition: 'width 0.2s',
@@ -84,61 +84,55 @@ const s = {
     top: 0,
     height: '100vh',
     flexShrink: 0,
+    boxShadow: '2px 0 12px rgba(0,0,0,0.18)',
   },
   sidebarHeader: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '20px 12px 16px',
-    borderBottom: ' 1px solid rgba(255,255,255,0.1)',
+    padding: '24px 12px 18px',
+    borderBottom: '1px solid rgba(255,255,255,0.08)',
+    position: 'relative',
   },
-  logoWrap: { display: 'flex', alignItems: 'center', gap: 10 },
-  logoImg: { width: 36, height: 36, objectFit: 'contain', flexShrink: 0 },
-  logoImgSmall: { width: 32, height: 32, objectFit: 'contain', margin: '0 auto' },
-  logoText: { color: '#fff', fontWeight: 700, fontSize: 17, fontFamily: "'Playfair Display', Georgia, serif" },
+  logoWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 4,
+  },
+  logoImg: {
+    width: 64,
+    height: 64,
+    objectFit: 'contain',
+    filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))',
+  },
+  logoImgSmall: {
+    width: 38,
+    height: 38,
+    objectFit: 'contain',
+    filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))',
+  },
   toggleBtn: {
-    background: 'none',
-    border: 'none',
-    color: 'rgba(255,255,255,0.6)',
+    position: 'absolute',
+    right: 8,
+    top: 10,
+    background: 'rgba(255,255,255,0.07)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    color: 'rgba(255,255,255,0.5)',
     cursor: 'pointer',
-    fontSize: 12,
-    padding: 4,
-    flexShrink: 0,
+    fontSize: 10,
+    padding: '3px 6px',
+    borderRadius: 6,
+    lineHeight: 1,
   },
-  nav: { flex: 1, padding: '8px 0' },
+  nav: { flex: 1, padding: '12px 8px' },
   navItem: {
     display: 'flex',
     alignItems: 'center',
     gap: 10,
-    padding: '10px 14px',
-    color: 'rgba(255,255,255,0.7)',
+    padding: '10px 12px',
+    color: 'rgba(255,255,255,0.65)',
     textDecoration: 'none',
-    transition: 'background 0.15s',
-  },
-  navItemActive: {
-    background: 'rgba(255,255,255,0.12)',
-    color: '#fff',
-    borderLeft: `3px solid ${colors.accent}`,
-  },
-  navIcon: { fontSize: 16, minWidth: 20, textAlign: 'center' },
-  navLabel: { fontSize: 14, fontWeight: 500 },
-  sidebarFooter: {
-    padding: '12px 14px',
-    borderTop: '1px solid rgba(255,255,255,0.1)',
-  },
-  adminInfo: { marginBottom: 8 },
-  adminName: { color: 'rgba(255,255,255,0.6)', fontSize: 12 },
-  logoutBtn: {
-    background: 'none',
-    border: 'none',
-    color: 'rgba(255,255,255,0.7)',
-    cursor: 'pointer',
-    fontSize: 13,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    padding: 4,
-  },
-  main: { flex: 1, overflow: 'auto' },
-  content: { padding: 28, maxWidth: 1100 },
-};
+    borderRadius: 9,
+    marginBo

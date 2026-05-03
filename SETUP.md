@@ -138,36 +138,4 @@ Configure a variável `VITE_API_URL` com a URL da sua API no Railway.
 [ ] 8. ADMIN_URL setada no Railway com a URL real do admin
 [ ] 9. mobile/src/services/api.js atualizado com URL do Railway
 [ ] 10. Login no admin testado com as novas credenciais
-[ ] 11. Criação de um anúncio teste e upload de imagem validados
-```
-
----
-
-## 5. Endpoints da API
-
-| Método | Rota | Auth | Descrição |
-|--------|------|------|-----------|
-| GET | `/health` | — | Health check |
-| GET | `/api/categories` | — | Lista categorias |
-| GET | `/api/categories/grouped` | — | Categorias agrupadas |
-| GET | `/api/listings` | — | Busca anúncios (filtros: search, category, city, type) |
-| GET | `/api/listings/featured` | — | Destaques para a home |
-| GET | `/api/listings/:id` | — | Detalhes do anúncio |
-| POST | `/api/auth/login` | — | Login admin (rate limited: 10/15min) |
-| GET | `/api/auth/me` | JWT | Verifica token |
-| GET | `/api/listings/admin/all` | JWT | Todos os anúncios (admin) |
-| POST | `/api/listings` | JWT | Criar anúncio |
-| PUT | `/api/listings/:id` | JWT | Editar anúncio |
-| PATCH | `/api/listings/:id/approve` | JWT | Aprovar/reprovar |
-| DELETE | `/api/listings/:id` | JWT | Excluir anúncio |
-| POST | `/api/upload` | JWT | Upload de imagem (Cloudinary) |
-
----
-
-## 6. Próximos passos (pós MVP)
-
-- [ ] Cadastro de anúncios pelo próprio usuário (formulário público)
-- [ ] Geolocalização automática
-- [ ] Assinaturas / planos (Stripe)
-- [ ] Banners publicitários
-- [ ] App publicado na Play Store e App Store
+[ ] 11. Criação de um
