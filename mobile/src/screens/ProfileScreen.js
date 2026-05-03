@@ -7,8 +7,8 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <Ionicons name="person-circle-outline" size={64} color={colors.border} />
-      <Text style={styles.title}>Meu Perfil</Text>
-      <Text style={styles.subtitle}>Faça login para acessar seu perfil e anúncios.</Text>
+      <Text style={styles.title}>Em breve</Text>
+      <Text style={styles.subtitle}>Aqui você poderá criar seu perfil e anunciar seus serviços no Equesto.</Text>
     </View>
   );
 }

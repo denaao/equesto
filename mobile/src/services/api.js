@@ -3,7 +3,7 @@
 // Troque BASE_URL pela URL do seu backend no Railway
 // ============================================================
 
-const BASE_URL = 'http://192.168.68.109:3000'; // IP local para testes — trocar pela URL do Railway em produção
+const BASE_URL = 'https://equesto-production.up.railway.app';
 
 // Helper para fazer requisições
 async function request(path, options = {}) {

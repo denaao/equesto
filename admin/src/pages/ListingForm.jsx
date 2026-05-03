@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCategories, createListing, updateListing, getListings } from '../services/api';
+import { getCategories, createListing, updateListing } from '../services/api';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const TYPES = ['profissional', 'empresa', 'fornecedor'];
 const STATES = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 
@@ -12,6 +13,8 @@ export default function ListingForm() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -34,9 +37,7 @@ export default function ListingForm() {
   useEffect(() => {
     getCategories().then(setCategories);
     if (isEdit) {
-      // carrega o listing do admin/all pelo id
-      // como não temos GET /admin/:id, usamos /api/listings/:id diretamente
-      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/listings/${id}`, {
+      fetch(`${API_URL}/api/listings/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('equesto_token')}` },
       })
         .then(r => r.json())
@@ -64,6 +65,28 @@ export default function ListingForm() {
   }, [id]);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await fetch(`${API_URL}/api/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('equesto_token')}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro no upload');
+      set('photo_url', data.url);
+    } catch (err) {
+      alert('Erro ao fazer upload: ' + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,8 +165,34 @@ export default function ListingForm() {
           </Field>
         </div>
 
-        <Field label="URL da Foto / Logo">
-          <input style={s.input} value={form.photo_url} onChange={e => set('photo_url', e.target.value)} placeholder="https://..." />
+        <Field label="Foto / Logo">
+          <div style={s.uploadArea}>
+            {form.photo_url && (
+              <img src={form.photo_url} alt="preview" style={s.preview} />
+            )}
+            <div style={s.uploadControls}>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                style={{ display: 'none' }}
+                onChange={handleUpload}
+              />
+              <button
+                type="button"
+                style={s.uploadBtn}
+                onClick={() => fileInputRef.current.click()}
+                disabled={uploading}
+              >
+                {uploading ? 'Enviando...' : form.photo_url ? '🔄 Trocar imagem' : '📷 Enviar imagem'}
+              </button>
+              {form.photo_url && (
+                <button type="button" style={s.removeBtn} onClick={() => set('photo_url', '')}>
+                  Remover
+                </button>
+              )}
+            </div>
+          </div>
         </Field>
 
         <Field label="Descrição">
@@ -201,7 +250,12 @@ const s = {
   form: { background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 16 },
   grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
   grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 },
-  input: { padding: '9px 12px', border: '1.5px solid #E8E4DC', borderRadius: 8, fontSize: 13, outline: 'none', width: '100%', fontFamily: 'inherit' },
+  input: { padding: '9px 12px', border: '1.5px solid #E8E4DC', borderRadius: 8, fontSize: 13, outline: 'none', width: '100%', fontFamily: 'inherit', boxSizing: 'border-box' },
+  uploadArea: { display: 'flex', flexDirection: 'column', gap: 8 },
+  uploadControls: { display: 'flex', gap: 8, alignItems: 'center' },
+  preview: { width: 120, height: 120, objectFit: 'cover', borderRadius: 8, border: '1.5px solid #E8E4DC' },
+  uploadBtn: { padding: '9px 16px', background: '#1B4332', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' },
+  removeBtn: { padding: '9px 16px', background: 'none', border: '1.5px solid #E8E4DC', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer', color: '#c00' },
   checkboxRow: { display: 'flex', gap: 24, flexWrap: 'wrap' },
   actions: { display: 'flex', gap: 12, justifyContent: 'flex-end', paddingTop: 8 },
   cancelBtn: { padding: '10px 20px', border: '1.5px solid #E8E4DC', borderRadius: 8, background: '#fff', cursor: 'pointer', fontSize: 14, fontWeight: 600 },
