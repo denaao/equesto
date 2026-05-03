@@ -51,11 +51,14 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================================
-// Start — roda migrations antes de abrir o servidor
+// Start — servidor sobe imediatamente, migrations em background
 // ============================================================
 const PORT = process.env.PORT || 3000;
 
-async function start() {
+app.listen(PORT, () => {
+  console.log(`🐎 Equesto API rodando na porta ${PORT}`);
+  console.log(`   Ambiente: ${process.env.NODE_ENV || 'development'}`);
+
   if (process.env.NODE_ENV === 'production') {
     const fs = require('fs');
     const path = require('path');
@@ -63,21 +66,13 @@ async function start() {
     const migrationDir = path.join(__dirname, '..', 'migrations');
     const files = fs.readdirSync(migrationDir).filter(f => f.endsWith('.sql')).sort();
     console.log('🔄 Executando migrations...');
-    for (const file of files) {
-      const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
-      console.log(`  → ${file}`);
-      await db.query(sql);
-    }
-    console.log('✅ Migrations concluídas!');
+    (async () => {
+      for (const file of files) {
+        const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
+        console.log(`  → ${file}`);
+        await db.query(sql);
+      }
+      console.log('✅ Migrations concluídas!');
+    })().catch(err => console.error('❌ Erro nas migrations:', err));
   }
-
-  app.listen(PORT, () => {
-    console.log(`🐎 Equesto API rodando na porta ${PORT}`);
-    console.log(`   Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  });
-}
-
-start().catch(err => {
-  console.error('❌ Erro ao iniciar:', err);
-  process.exit(1);
 });
