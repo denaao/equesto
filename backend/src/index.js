@@ -16,7 +16,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // permite requests sem origin (ex: mobile, Postman, curl)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS bloqueado: ${origin}`));
@@ -48,4 +47,32 @@ app.use((req, res) => {
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ er
+  res.status(500).json({ error: 'Erro interno do servidor' });
+});
+
+// ============================================================
+// Start — servidor sobe imediatamente, migrations em background
+// ============================================================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Equesto API rodando na porta ${PORT}`);
+  console.log(`Ambiente: ${process.env.NODE_ENV || 'development'}`);
+
+  if (process.env.NODE_ENV === 'production') {
+    const fs = require('fs');
+    const path = require('path');
+    const db = require('./database');
+    const migrationDir = path.join(__dirname, '..', 'migrations');
+    const files = fs.readdirSync(migrationDir).filter(f => f.endsWith('.sql')).sort();
+    console.log('Executando migrations...');
+    (async () => {
+      for (const file of files) {
+        const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
+        console.log(`  -> ${file}`);
+        await db.query(sql);
+      }
+      console.log('Migrations concluidas!');
+    })().catch(err => console.error('Erro nas migrations:', err));
+  }
+});
