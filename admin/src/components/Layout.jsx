@@ -95,7 +95,7 @@ const s = {
   logoWrap: { display: 'flex', alignItems: 'center', gap: 10 },
   logoImg: { width: 36, height: 36, objectFit: 'contain', flexShrink: 0 },
   logoImgSmall: { width: 32, height: 32, objectFit: 'contain', margin: '0 auto' },
-  logoText: { color: '#fff', fontWeight: 800, fontSize: 17 },
+  logoText: { color: '#fff', fontWeight: 700, fontSize: 17, fontFamily: "'Playfair Display', Georgia, serif" },
   toggleBtn: {
     background: 'none',
     border: 'none',
